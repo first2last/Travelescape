@@ -40,7 +40,7 @@ const NavBar = () => {
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
         }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-            <Compass color="#00ffcc" size={28} />
+            <img src="/images/travelscape_icon.png" alt="TravelScape" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
             <span style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '1px' }} className="text-gradient">
               TravelScape
             </span>
