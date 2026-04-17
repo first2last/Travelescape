@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { X, Calendar, MapPin, Tag, Plane, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useIsMobile } from '../hooks/useIsMobile';
 import AuthModal from './AuthModal';
 
 const CityModal = ({ city, onClose }) => {
   const { user, toggleWishlist, isWishlisted } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const wishlisted = isWishlisted(city?.id);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -102,28 +104,32 @@ const CityModal = ({ city, onClose }) => {
           </button>
 
           {/* Header Image */}
-          <div style={{ width: '100%', height: '350px', backgroundImage: `url(${city.thumbnail})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+          <div style={{ width: '100%', height: isMobile ? '240px' : '350px', backgroundImage: `url(${city.thumbnail})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
             <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '150px', background: 'linear-gradient(to top, rgba(12,12,14,1) 0%, transparent 100%)' }} />
-            <div style={{ position: 'absolute', bottom: '2rem', left: '2.5rem' }}>
-              <h2 style={{ fontSize: '3.5rem', margin: 0, color: '#fff', letterSpacing: '-1px', textShadow: '0 4px 20px rgba(0,0,0,0.8)' }}>{city.name}</h2>
-              <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginTop: '5px' }}>
-                <span style={{ color: 'var(--neon-cyan)', fontWeight: 600, fontSize: '1.1rem', letterSpacing: '1px', textTransform: 'uppercase' }}>{city.country}</span>
+            <div style={{ position: 'absolute', bottom: isMobile ? '1rem' : '2rem', left: isMobile ? '1.5rem' : '2.5rem', right: isMobile ? '1.5rem' : 'auto' }}>
+              <h2 style={{ fontSize: isMobile ? '2.2rem' : '3.5rem', margin: 0, color: '#fff', letterSpacing: '-1px', textShadow: '0 4px 20px rgba(0,0,0,0.8)', lineHeight: 1.1 }}>{city.name}</h2>
+              <div style={{ display: 'flex', gap: isMobile ? '8px' : '15px', alignItems: 'center', marginTop: '5px', flexWrap: 'wrap' }}>
+                <span style={{ color: 'var(--neon-cyan)', fontWeight: 600, fontSize: isMobile ? '0.9rem' : '1.1rem', letterSpacing: '1px', textTransform: 'uppercase' }}>{city.country}</span>
                 <span style={{ color: '#666' }}>•</span>
-                <span style={{ color: '#aaa', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <MapPin size={16} /> {city.lat.toFixed(2)} / {city.lng.toFixed(2)}
+                <span style={{ color: '#aaa', fontSize: isMobile ? '0.85rem' : '1rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <MapPin size={isMobile ? 12 : 16} /> {city.lat.toFixed(2)} / {city.lng.toFixed(2)}
                 </span>
                 {user && (
-                  <span style={{ color: wishlisted ? '#ff3c64' : '#555', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Heart size={13} fill={wishlisted ? '#ff3c64' : 'none'} />
-                    {wishlisted ? 'Wishlisted' : ''}
-                  </span>
+                  <>
+                    {/* hidden on tiny screens to save space, but visible otherwise */}
+                    {!isMobile && <span style={{ color: '#666' }}>•</span>}
+                    <span style={{ color: wishlisted ? '#ff3c64' : '#555', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Heart size={13} fill={wishlisted ? '#ff3c64' : 'none'} />
+                      {wishlisted ? 'Wishlisted' : ''}
+                    </span>
+                  </>
                 )}
               </div>
             </div>
           </div>
 
           {/* Content Body */}
-          <div style={{ padding: '2.5rem', display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: '3rem' }}>
+          <div style={{ padding: isMobile ? '1.5rem' : '2.5rem', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 2fr) minmax(0, 1fr)', gap: isMobile ? '1.5rem' : '3rem' }}>
 
             {/* Main Column */}
             <div>
@@ -137,7 +143,7 @@ const CityModal = ({ city, onClose }) => {
                 <span style={{ width: '8px', height: '8px', background: 'var(--neon-cyan)', borderRadius: '50%', boxShadow: '0 0 10px var(--neon-cyan)' }}></span>
                 Notable Places to Visit
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1rem' }}>
                 {city.details.places.map((place, i) => (
                   <div key={i} style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '12px', borderLeft: '2px solid rgba(0, 255, 204, 0.3)', color: '#ddd', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <MapPin size={16} style={{ color: 'var(--neon-cyan)' }} /> {place}
