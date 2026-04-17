@@ -33,6 +33,13 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent; /* remove tap flash on mobile */
+  touch-action: pan-y;                      /* allow vertical scroll, allow touch events */
+}
+
+/* Native-feel scrolling on iOS */
+* {
+  -webkit-overflow-scrolling: touch;
 }
 
 h1, h2, h3, h4, h5, h6 {
